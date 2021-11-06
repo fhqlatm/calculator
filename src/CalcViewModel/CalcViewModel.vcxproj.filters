@@ -89,6 +89,7 @@
     <ClCompile Include="MemoryItemViewModel.cpp" />
     <ClCompile Include="StandardCalculatorViewModel.cpp" />
     <ClCompile Include="UnitConverterViewModel.cpp" />
+    <ClCompile Include="lunarday.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -203,10 +204,14 @@
     <ClInclude Include="StandardCalculatorViewModel.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UnitConverterViewModel.h" />
+    <ClInclude Include="lunarday.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DataLoaders\DefaultFromToCurrency.json">
       <Filter>DataLoaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CalcViewModel.rc" />
   </ItemGroup>
 </Project>
