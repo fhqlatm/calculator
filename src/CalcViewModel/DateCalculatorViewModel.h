@@ -111,6 +111,7 @@ namespace CalculatorApp
             Platform::String ^ GetDateDiffStringInDays() const;
             Platform::String ^ GetLocalizedNumberString(int value) const;
             static Windows::Foundation::DateTime ClipTime(Windows::Foundation::DateTime dateTime, bool adjustUsingLocalTime = false);
+            static Windows::Foundation::DateTime lunarClipTime(Windows::Foundation::DateTime dateTime, bool adjustUsingLocalTime = false);
 
             property bool IsOutOfBound
             {

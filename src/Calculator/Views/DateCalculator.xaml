@@ -86,7 +86,6 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
@@ -296,15 +295,6 @@
                                         CornerRadius="{ThemeResource ControlCornerRadius}"/>
                                 <TextBlock x:Name="DateText"
                                            Grid.Row="1"
-                                           Grid.Column="1"
-                                           Padding="0,0,0,2"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                           FontSize="14"
-                                           Text="{TemplateBinding PlaceholderText}"/>
-                                <TextBlock x:Name="DateText2"
-                                           Grid.Row="2"
                                            Grid.Column="1"
                                            Padding="0,0,0,2"
                                            HorizontalAlignment="Left"
@@ -1058,9 +1048,13 @@
                 <RowDefinition Height="1*" MaxHeight="24"/>
                 <RowDefinition Height="Auto" MinHeight="32"/>
                 <RowDefinition Height="1*" MaxHeight="24"/>
+                <RowDefinition Height="Auto" MinHeight="32"/>
+                <RowDefinition Height="1*" MaxHeight="24"/>
+                <RowDefinition Height="Auto" MinHeight="32"/>
+                <RowDefinition Height="1*" MaxHeight="24"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1*" MaxHeight="8"/>
+                <RowDefinition Height="1*" MaxHeight="24"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -1072,24 +1066,41 @@
                                 CalendarViewStyle="{StaticResource DateCalculation_CalendarViewStyle}"
                                 Closed="CalendarFlyoutClosed"
                                 DateChanged="FromDate_DateChanged"/>
+            <CalendarDatePicker x:Name="DateDiff_FromDate2"
+                                x:Uid="DateDiff_FromHeader2"
+                                Grid.Row="3"
+                                Style="{StaticResource DateCalculation_CalendarPickerStyle}"
+                                CalendarViewStyle="{StaticResource DateCalculation_CalendarViewStyle}"
+                                Closed="CalendarFlyoutClosed"
+                                DateChanged="FromDate_DateChanged"
+                                IsEnabled="False"/>
 
             <!-- To Date -->
             <CalendarDatePicker x:Name="DateDiff_ToDate"
                                 x:Uid="DateDiff_ToHeader"
-                                Grid.Row="3"
+                                Grid.Row="5"
                                 Margin="0,0,0,0"
                                 Style="{StaticResource DateCalculation_CalendarPickerStyle}"
                                 CalendarViewStyle="{StaticResource DateCalculation_CalendarViewStyle}"
                                 Closed="CalendarFlyoutClosed"
                                 DateChanged="ToDate_DateChanged"/>
+            <CalendarDatePicker x:Name="DateDiff_ToDate2"
+                                x:Uid="DateDiff_ToHeader2"
+                                Grid.Row="7"
+                                Margin="0,0,0,0"
+                                Style="{StaticResource DateCalculation_CalendarPickerStyle}"
+                                CalendarViewStyle="{StaticResource DateCalculation_CalendarViewStyle}"
+                                Closed="CalendarFlyoutClosed"
+                                DateChanged="ToDate_DateChanged"
+                                IsEnabled="False"/>
 
             <!-- Difference Result -->
             <TextBlock x:Uid="Date_DifferenceLabel"
-                       Grid.Row="5"
+                       Grid.Row="9"
                        Margin="0,0,0,0"
                        Style="{ThemeResource DateCalculation_CaptionTextStyle}"/>
             <TextBlock x:Name="DateDiffAllUnitsResultLabel"
-                       Grid.Row="6"
+                       Grid.Row="10"
                        Margin="0,4,0,0"
                        Style="{ThemeResource BodyTextBlockStyle}"
                        AutomationProperties.LiveSetting="Polite"
@@ -1097,7 +1108,7 @@
                        ContextFlyout="{StaticResource ResultsContextMenu}"
                        IsTextSelectionEnabled="True"
                        Text="{Binding StrDateDiffResult}"/>
-            <TextBlock Grid.Row="8"
+            <TextBlock Grid.Row="11"
                        Style="{ThemeResource DateCalculation_CaptionTextStyle}"
                        ContextFlyout="{StaticResource ResultsContextMenu}"
                        IsTextSelectionEnabled="True"

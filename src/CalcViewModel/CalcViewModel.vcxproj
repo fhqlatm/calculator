@@ -370,7 +370,6 @@
     <ClCompile Include="GraphingCalculator\GraphingSettingsViewModel.cpp" />
     <ClCompile Include="HistoryItemViewModel.cpp" />
     <ClCompile Include="HistoryViewModel.cpp" />
-    <ClCompile Include="lunarday.cpp" />
     <ClCompile Include="MemoryItemViewModel.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

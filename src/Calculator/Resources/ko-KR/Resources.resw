@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -2468,6 +2468,10 @@
     <value>시작일</value>
     <comment>From Date Header for Difference Date Picker</comment>
   </data>
+  <data name="DateDiff_FromHeader2.Header" xml:space="preserve">
+    <value>시작일(음력)</value>
+    <comment>From Date Header for Difference Date Picker</comment>
+  </data>
   <data name="MonthsLabel.Text" xml:space="preserve">
     <value>월</value>
     <comment>Add/Subtract Months label</comment>
@@ -2478,6 +2482,10 @@
   </data>
   <data name="DateDiff_ToHeader.Header" xml:space="preserve">
     <value>종료일</value>
+    <comment>To Date Header for Difference Date Picker</comment>
+  </data>
+  <data name="DateDiff_ToHeader2.Header" xml:space="preserve">
+    <value>종료일(음력)</value>
     <comment>To Date Header for Difference Date Picker</comment>
   </data>
   <data name="YearsLabel.Text" xml:space="preserve">

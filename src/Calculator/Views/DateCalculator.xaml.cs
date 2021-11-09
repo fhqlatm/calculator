@@ -61,6 +61,14 @@ namespace CalculatorApp
             var calendar = new Calendar();
             var today = calendar.GetDateTime();
 
+            var lunarCalender = new Calendar();
+            int[] v = new int[3];
+            v = getLunarDate(calendar.Year, calendar.Month, calendar.Day);
+            lunarCalender.Year = v[0];
+            lunarCalender.Month = v[1];
+            lunarCalender.Day = v[2];
+            var lunarToday = lunarCalender.GetDateTime();
+
             calendar.ChangeCalendarSystem(CalendarIdentifiers.Gregorian);
             calendar.Day = 1;
             calendar.Month = 1;
@@ -83,12 +91,17 @@ namespace CalculatorApp
                 ClockIdentifiers.TwentyFourHour); // Clock Identifier is not used
 
             DateDiff_FromDate.DateFormat = "day month year";
+            DateDiff_FromDate2.DateFormat = "day month year";
             DateDiff_ToDate.DateFormat = "day month year";
+            DateDiff_ToDate2.DateFormat = "day month year";
 
             var placeholderText = dateTimeFormatter.Format(today);
+            var placeholderText2 = dateTimeFormatter.Format(lunarToday);
 
             DateDiff_FromDate.PlaceholderText = placeholderText;
+            DateDiff_FromDate2.PlaceholderText = placeholderText2;
             DateDiff_ToDate.PlaceholderText = placeholderText;
+            DateDiff_ToDate2.PlaceholderText = placeholderText2;
 
             CopyMenuItem.Text = AppResourceProvider.GetInstance().GetResourceString("copyMenuItem");
             DateCalculationOption.SelectionChanged += DateCalcOption_Changed;
@@ -124,6 +137,12 @@ namespace CalculatorApp
                 var dateCalcViewModel = (DateCalculatorViewModel)DataContext;
                 dateCalcViewModel.FromDate = e.NewDate.Value;
                 TraceLogger.GetInstance().LogDateCalculationModeUsed(false);
+
+                int[] v = new int[3];
+                
+                v = getLunarDate(DateDiff_FromDate.Date.Value.Year, DateDiff_FromDate.Date.Value.Month, DateDiff_FromDate.Date.Value.Day);
+
+                DateDiff_FromDate2.Date = new DateTime(v[0], v[1], v[2]);
             }
             else
             {
@@ -138,6 +157,12 @@ namespace CalculatorApp
                 var dateCalcViewModel = (DateCalculatorViewModel)this.DataContext;
                 dateCalcViewModel.ToDate = e.NewDate.Value;
                 TraceLogger.GetInstance().LogDateCalculationModeUsed(false);
+
+                int[] v = new int[3];
+
+                v = getLunarDate(DateDiff_ToDate.Date.Value.Year, DateDiff_ToDate.Date.Value.Month, DateDiff_ToDate.Date.Value.Day);
+
+                DateDiff_ToDate2.Date = new DateTime(v[0], v[1], v[2]);
             }
             else
             {
@@ -263,5 +288,139 @@ namespace CalculatorApp
         private const int c_minYear = 1601;
 
         private static readonly LocalizationSettings localizationSettings = LocalizationSettings.GetInstance();
+
+        int[] lunarDayOfMonth = new int[6]{ 29, 30, 58, 59, 59, 60 };
+
+        int[] lunarDayOfMonthFrac = new int[6]{ 0, 0, 29, 30, 30, 30 };
+
+        int[,] lunarDayOfMonthIndex = new int[50,12]{
+            // 2001 ~ 2010
+            { 1, 1, 1, 2, 1, 0, 0, 1, 0, 1, 0, 1 },
+            { 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
+            { 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
+            { 0, 4, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1 },
+            { 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
+            { 1, 0, 1, 0, 1, 0, 4, 1, 1, 0, 1, 1 },
+            { 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1 },
+            { 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1 },
+            { 1, 1, 0, 0, 4, 0, 1, 0, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1 },
+            // 2011 ~ 2020
+            { 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
+            { 1, 0, 5, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
+            { 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1 },
+            { 0, 1, 0, 1, 0, 1, 0, 1, 4, 1, 0, 1 },
+            { 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1 },
+            { 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1 },
+            { 1, 0, 0, 1, 2, 1, 0, 1, 0, 1, 1, 1 },
+            { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1 },
+            { 1, 0, 1, 4, 1, 0, 0, 1, 0, 1, 0, 1 },
+            // 2021 ~ 2030
+            { 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 },
+            { 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1 },
+            { 0, 4, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1 },
+            { 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0 },
+            { 1, 0, 1, 0, 0, 4, 1, 0, 1, 1, 1, 0 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1 },
+            { 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1 },
+            { 0, 1, 1, 0, 4, 0, 1, 0, 0, 1, 1, 0 },
+            { 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1 },
+            { 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0 },
+            // 2031 ~ 2040
+            { 1, 0, 4, 1, 0, 1, 1, 0, 1, 0, 1, 0 },
+            { 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
+            { 0, 1, 0, 0, 1, 0, 4, 1, 1, 1, 0, 1 },
+            { 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0 },
+            { 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1 },
+            { 1, 1, 0, 1, 0, 3, 0, 0, 1, 0, 1, 1 },
+            { 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
+            { 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0 },
+            { 1, 1, 0, 1, 4, 1, 0, 1, 0, 1, 0, 0 },
+            { 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0 },
+            // 2041 ~ 2050
+            { 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
+            { 0, 4, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1 },
+            { 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 2, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1 },
+            { 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
+            { 1, 0, 1, 1, 3, 0, 1, 0, 0, 1, 0, 1 },
+            { 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0 },
+            { 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0 },
+            { 1, 0, 3, 0, 1, 0, 1, 1, 0, 1, 1, 0 }
+        };
+
+        int[] lunarDayOfYear = new int[50]{
+            384, 354, 355, 384, 354, 385, 354, 354, 384, 354, // 2001 ~ 2010
+            354, 384, 355, 384, 355, 354, 384, 354, 354, 384, // 2011 ~ 2020
+            354, 355, 384, 354, 384, 355, 354, 383, 355, 354, // 2021 ~ 2030
+            384, 355, 384, 354, 354, 384, 354, 354, 384, 355, // 2031 ~ 2040
+            355, 384, 354, 384, 354, 354, 384, 353, 355, 384  // 2041 ~ 2050
+        };
+
+        int[] solarDayNum = new int[12]{ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+        int getSolarDayOfMonth(int y, int m)
+        { // 월별 일수 계산
+            if (m != 2)
+                return solarDayNum[m - 1];
+
+            if ((y % 400 == 0) || ((y % 100 != 0) && (y % 4 == 0)))
+                return 29;
+            else
+                return 28;
+        }
+
+        int getSolarDayOfYear(int y)
+        {
+            if ((y % 400 == 0) || ((y % 100 != 0) && (y % 4 == 0)))
+                return 366;
+            else
+                return 365;
+        }
+
+        int getTotalDaySolar(int y, int m, int d)
+        {
+            // 양력 2001/01/24 = 음력 2001/01/01
+            int[] solarBasis = new int[3]{ 2001, 1, 24 };
+            int i;
+            int ret = 0;
+
+            for (i = solarBasis[0]; i < y; i++)
+                ret += getSolarDayOfYear(i);
+            for (i = 1; i < m; i++)
+                ret += getSolarDayOfMonth(y, i);
+            ret += d;
+            for (i = 1; i < solarBasis[1]; i++)
+                ret -= getSolarDayOfMonth(solarBasis[0], i);
+            ret -= solarBasis[2];
+
+            return ret;
+        }
+
+        int[] getLunarDate(int solarYear, int solarMonth, int solarDay)
+        {
+            int[] v = new int[3];
+            int y = -1, m = -1, d = 0, f;
+            int totalDay = getTotalDaySolar(solarYear, solarMonth, solarDay);
+
+            while (totalDay >= lunarDayOfYear[++y])
+                totalDay -= lunarDayOfYear[y];
+            while (totalDay >= (d = lunarDayOfMonth[lunarDayOfMonthIndex[y,++m]]))
+                totalDay -= d;
+            d = totalDay;
+
+            f = lunarDayOfMonthFrac[lunarDayOfMonthIndex[y,m]];
+            if (d >= f)
+                d -= f;
+
+            v[0] = (y + 1) + 2000;
+            v[1] = (m + 1);
+            v[2] = (d + 1);
+
+            return v;
+        }
+
     }
 }
