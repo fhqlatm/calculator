@@ -89,7 +89,6 @@
     <ClCompile Include="MemoryItemViewModel.cpp" />
     <ClCompile Include="StandardCalculatorViewModel.cpp" />
     <ClCompile Include="UnitConverterViewModel.cpp" />
-    <ClCompile Include="lunarday.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
